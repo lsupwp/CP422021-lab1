@@ -1,5 +1,26 @@
 <script setup>
+
 import InfoCard from "@/components/cards/InfoCard.vue";
+import { useTableStore } from "@/store/table";
+import TableInfoCard from "@/components/cards/TableInfoCard.vue";
+
+function getFormattedDateTime(dateObject) {
+  const day = String(dateObject.getDate()).padStart(2, '0');
+  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+  const year = dateObject.getFullYear();
+  const hours = String(dateObject.getHours()).padStart(2, '0');
+  const minutes = String(dateObject.getMinutes()).padStart(2, '0');
+  const seconds = String(dateObject.getSeconds()).padStart(2, '0');
+
+  return `${day}/${month}/${year}:${hours}:${minutes}:${seconds}`;
+}
+
+const tableStore = useTableStore();
+const reserveTable = (table) => {
+  table.status = 'reserve'
+  table.checkin = getFormattedDateTime(new Date());
+}
+
 </script>
 <template>
   <VCard>
@@ -32,91 +53,15 @@ import InfoCard from "@/components/cards/InfoCard.vue";
     <VCardText>
 
       <VRow>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
+        <VCol v-for="table in tableStore.tables" cols="3">
+          <v-btn v-if="table.status == 'ready'" @click="reserveTable(table)" style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
             <div class="d-flex align-center"> <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 1</p>
+              <p class="ma-0">{{table.name}} - {{ table.status }}</p>
             </div>
           </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 2</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 3</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 4</p>
-            </div>
-          </v-btn>
+          <TableInfoCard v-else :table ="table"/>
         </VCol>
       </VRow>
-
-      <VRow>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center"> <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 5</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 6</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 7</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 8</p>
-            </div>
-          </v-btn>
-        </VCol>
-      </VRow>
-
-      <VRow>
-        <VCol cols="3">
-          <v-btn style="block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center"> <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 9</p>
-            </div>
-          </v-btn>
-        </VCol>
-        <VCol cols="3">
-          <v-btn style=" block-size: 200px; inline-size: 400px;" color="#8A2BE2" text-color="white">
-            <div class="d-flex align-center">
-              <v-icon icon="mdi-table" size="x-large" class="me-2"></v-icon>
-              <p class="ma-0">โต๊ะที่ 10</p>
-            </div>
-          </v-btn>
-        </VCol>
-      </VRow>
-
 
     </VCardText>
   </VCard>
